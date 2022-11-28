@@ -26,7 +26,8 @@
   },
   "dependencies": {
     "dotenv": "^16.0.3",
-    "fastify": "^4.10.2"
+    "fastify": "^4.10.2",
+    "mongodb": "^4.12.1"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
