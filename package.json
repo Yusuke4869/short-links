@@ -25,6 +25,7 @@
     "npm": "Please use yarn instead"
   },
   "dependencies": {
+    "dotenv": "^16.0.3",
     "fastify": "^4.10.2"
   },
   "devDependencies": {
