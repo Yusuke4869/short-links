@@ -1,4 +1,4 @@
-FROM node:18-alpine3.17 as build
+FROM node:19-alpine3.17 as build
 WORKDIR /app
 
 COPY package.json yarn.lock tsconfig.json ./
@@ -7,7 +7,7 @@ RUN yarn install --frozen-lockfile && \
   yarn run build
 
 
-FROM node:18-alpine3.17 as run
+FROM node:19-alpine3.17 as run
 WORKDIR /app
 
 ENV NODE_ENV production
