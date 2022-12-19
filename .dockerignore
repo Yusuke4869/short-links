@@ -1,0 +1,14 @@
+.dockerignore
+.gitignore
+.env*
+*.log
+
+.git/
+.github/
+.husky/
+
+node_modules/
+dist/
+
+LICENSE
+*.md
