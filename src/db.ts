@@ -62,7 +62,13 @@ export class DataBase {
     });
   }
 
-  async #getData() {
+  async ping() {
+    await this.#wait();
+    const ping = await this.db?.admin().ping();
+    return ping;
+  }
+
+  async getData() {
     try {
       await this.#wait();
       const res = await this.collection?.findOne({ name: DATA_NAME });
@@ -78,7 +84,7 @@ export class DataBase {
    * @returns PathData | undefined
    */
   async getPathData(path: string) {
-    const data = await this.#getData();
+    const data = await this.getData();
     const res = data?.data.find((v) => v.path === path);
     return res;
   }
@@ -91,7 +97,7 @@ export class DataBase {
    */
   async updatePathData(path: string, newPathData: PathData) {
     try {
-      const getData = await this.#getData();
+      const getData = await this.getData();
       const data = getData?.data.filter((v) => v.path !== path);
       if (!data) return;
 
