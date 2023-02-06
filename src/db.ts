@@ -6,8 +6,8 @@ dotenv.config();
 
 const MONGODB_URL = process.env.MONGODB_URL ?? "";
 const DB_NAME = process.env.DB_NAME ?? "data";
-const DB_COLLECTION_NAME = process.env.DB_COLLECTION_NAME ?? "short-link";
-const DATA_NAME = process.env.DATA_NAME ?? "short-link";
+const DB_COLLECTION_NAME = process.env.DB_COLLECTION_NAME ?? "short-links";
+const DATA_NAME = process.env.DATA_NAME ?? "short-links";
 
 type Data = {
   _id?: ObjectId;

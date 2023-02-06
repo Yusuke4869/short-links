@@ -1,5 +1,5 @@
-# Short Link  
+# Short Links
 
-## License  
+## License
 
-MIT  
+MIT
