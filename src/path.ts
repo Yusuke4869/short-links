@@ -5,11 +5,11 @@ import { db } from "./index";
 
 dotenv.config();
 
-const TOKEN = process.env.TOKEN ?? null;
+const TOKEN = process.env.TOKEN?.split(",") ?? null;
 
 const auth = async (res: FastifyReply, token: string | undefined) => {
   if (!token || !TOKEN) return res.code(401).send("401 Unauthorized");
-  if (token !== TOKEN) return res.code(403).send("403 Forbidden");
+  if (!TOKEN.includes(token ?? "")) return res.code(403).send("403 Forbidden");
 };
 
 const updatePath = async (res: FastifyReply, path: string, redirectUrl: string | undefined) => {

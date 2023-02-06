@@ -6,7 +6,7 @@ import { auth, disablePath, updatePath, updatePathState } from "../path";
 
 dotenv.config();
 
-const TOKEN = process.env.TOKEN ?? null;
+const TOKEN = process.env.TOKEN?.split(",") ?? null;
 
 const pathRoutes = (server: FastifyInstance) => {
   server.all<{
@@ -40,7 +40,7 @@ const pathRoutes = (server: FastifyInstance) => {
     else if (requestMethod === "DELETE") await disablePath(res, path, req.url);
 
     // Pathに関する情報を見る
-    if (info && TOKEN && token === TOKEN) {
+    if (info && TOKEN && TOKEN.includes(token ?? "")) {
       const data = await db.getPathData(path);
       if (!data) return res.code(404).send(`${req.url} Not Found`);
       return res.code(200).send(data);
