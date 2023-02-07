@@ -5,6 +5,8 @@ import { DataBase } from "./db";
 import { apiRoutes } from "./routes/api";
 import { pathRoutes } from "./routes/path";
 
+const PORT = Number(process.env.PORT) ?? 3000;
+
 export const db = new DataBase();
 
 const server: FastifyInstance = Fastify({ logger: true });
@@ -21,7 +23,7 @@ server.setNotFoundHandler(async (req: FastifyRequest, res: FastifyReply) => {
 
 const start = async () => {
   try {
-    await server.listen({ port: 3000 });
+    await server.listen({ port: PORT });
   } catch (err) {
     console.error(err);
     process.exit(1);
