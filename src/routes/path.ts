@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import type { FastifyInstance, FastifyReply } from "fastify";
 
 import { db } from "../index";
-import { auth, disablePath, updatePath, updatePathState } from "../path";
+import { authErrorReturn, checkToken, disablePath, updatePath, updatePathState } from "../path";
 
 dotenv.config();
 
@@ -31,13 +31,17 @@ const pathRoutes = (server: FastifyInstance) => {
     const requestMethod = method ? method.toUpperCase() : req.method;
 
     // GETリクエスト以外はすべてトークン認証を行うため確認
-    if (requestMethod !== "GET") await auth(res, token);
+    if (requestMethod !== "GET") {
+      const authStatus = await checkToken(token);
+      if (authStatus !== 200) return await authErrorReturn(res, authStatus);
+    }
+
     // リダイレクト先の作成または更新
-    if (requestMethod === "PUT") await updatePath(res, path, url);
+    if (requestMethod === "PUT") return await updatePath(res, path, url);
     // カウントのリセットまたはリダイレクトの有効化
-    else if (requestMethod === "PATCH") await updatePathState(res, path, req.url, reset);
+    else if (requestMethod === "PATCH") return await updatePathState(res, path, req.url, reset);
     // リダイレクトの無効化
-    else if (requestMethod === "DELETE") await disablePath(res, path, req.url);
+    else if (requestMethod === "DELETE") return await disablePath(res, path, req.url);
 
     // Pathに関する情報を見る
     if (info && TOKEN && TOKEN.includes(token ?? "")) {

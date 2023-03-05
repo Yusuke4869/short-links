@@ -7,9 +7,15 @@ dotenv.config();
 
 const TOKEN = process.env.TOKEN?.split(",") ?? null;
 
-const auth = async (res: FastifyReply, token: string | undefined) => {
-  if (!token || !TOKEN) return res.code(401).send("401 Unauthorized");
-  if (!TOKEN.includes(token ?? "")) return res.code(403).send("403 Forbidden");
+const checkToken = async (token: string | undefined) => {
+  if (!token || !TOKEN) return 401;
+  if (TOKEN.includes(token)) return 200;
+  return 403;
+};
+
+const authErrorReturn = async (res: FastifyReply, statusCode: number) => {
+  if (statusCode === 401) return res.code(401).send("401 Unauthorized");
+  return res.code(403).send("403 Forbidden");
 };
 
 const updatePath = async (res: FastifyReply, path: string, redirectUrl: string | undefined) => {
@@ -55,4 +61,4 @@ const disablePath = async (res: FastifyReply, path: string, url: string) => {
   return res.code(200).send("200 OK");
 };
 
-export { auth, updatePath, updatePathState, disablePath };
+export { checkToken, authErrorReturn, updatePath, updatePathState, disablePath };
