@@ -20,10 +20,6 @@
       "yarn format"
     ]
   },
-  "engines": {
-    "node": "18.15.0",
-    "npm": "Please use yarn instead"
-  },
   "volta": {
     "node": "18.15.0"
   },
