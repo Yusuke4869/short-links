@@ -5,9 +5,9 @@
   "license": "MIT",
   "author": "Yusuke4869",
   "scripts": {
-    "dev": "ts-node-dev src/index.ts",
+    "dev": "ts-node-dev src/server.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "node dist/server.js",
     "lint": "eslint --ignore-path .gitignore src/",
     "lint:fix": "eslint --ignore-path .gitignore src/ --fix",
     "format": "prettier --write src/",
@@ -15,7 +15,7 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "src/": [
+    "src/**/*": [
       "yarn lint:fix",
       "yarn format"
     ]

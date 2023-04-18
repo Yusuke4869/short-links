@@ -1,59 +1,10 @@
-import dotenv from "dotenv";
-import type { FastifyInstance, FastifyReply } from "fastify";
+import type { FastifyInstance } from "fastify";
 
-import { db } from "../index";
-import { authErrorReturn, checkToken, disablePath, updatePath, updatePathState } from "../path";
+import PathController from "../controllers/pathController";
+import type { IPathRequest } from "../types";
 
-dotenv.config();
-
-const TOKEN = process.env.TOKEN?.split(",") ?? null;
-
-const pathRoutes = (server: FastifyInstance) => {
-  server.all<{
-    Params: {
-      path: string;
-    };
-    Querystring: {
-      // アクセストークン
-      token: string | undefined;
-      // ブラウザから操作できるようmethodを指定可能に
-      method: string | undefined;
-      // Pathに関する情報を表示するかどうか
-      info: boolean | undefined;
-      // リダイレクト先URL
-      url: string | undefined;
-      // カウントをリセットするかどうか
-      reset: boolean | undefined;
-    };
-  }>("/:path", async (req, res: FastifyReply) => {
-    const { path } = req.params;
-    const { token, method, info, url, reset } = req.query;
-    const requestMethod = method ? method.toUpperCase() : req.method;
-
-    // GETリクエスト以外はすべてトークン認証を行うため確認
-    if (requestMethod !== "GET") {
-      const authStatus = await checkToken(token);
-      if (authStatus !== 200) return await authErrorReturn(res, authStatus);
-    }
-
-    // リダイレクト先の作成または更新
-    if (requestMethod === "PUT") return await updatePath(res, path, url);
-    // カウントのリセットまたはリダイレクトの有効化
-    else if (requestMethod === "PATCH") return await updatePathState(res, path, req.url, reset);
-    // リダイレクトの無効化
-    else if (requestMethod === "DELETE") return await disablePath(res, path, req.url);
-
-    // Pathに関する情報を見る
-    if (info && TOKEN && TOKEN.includes(token ?? "")) {
-      const data = await db.getPathData(path);
-      if (!data) return res.code(404).send(`${req.url} Not Found`);
-      return res.code(200).send(data);
-    }
-
-    const redirectUrl = await db.getUrl(path);
-    if (!redirectUrl) return res.code(404).send(`${req.url} Not Found`);
-    return res.redirect(302, redirectUrl);
-  });
+const PathRoutes = async (fastify: FastifyInstance) => {
+  fastify.get<IPathRequest>("/:path", PathController.getPathRequest);
 };
 
-export { pathRoutes };
+export default PathRoutes;

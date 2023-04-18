@@ -3,6 +3,8 @@ import { MongoClient } from "mongodb";
 import type { Collection, Db, ObjectId } from "mongodb";
 import { exit } from "process";
 
+import type { IPath } from "../types/path";
+
 dotenv.config();
 
 const MONGODB_URL = process.env.MONGODB_URL ?? "";
@@ -13,14 +15,7 @@ const DATA_NAME = process.env.DATA_NAME ?? "short-links";
 type Data = {
   _id?: ObjectId;
   name: string;
-  data: PathData[];
-};
-
-type PathData = {
-  path: string;
-  url: string;
-  count: number;
-  unavailable: boolean;
+  data: IPath[];
 };
 
 export class DataBase {
@@ -104,7 +99,7 @@ export class DataBase {
    * @param newPathData
    * @returns Result | undefined
    */
-  async updatePathData(path: string, newPathData: PathData) {
+  async updatePathData(path: string, newPathData: IPath) {
     try {
       const getData = await this.getData();
       const data = getData?.data.filter((v) => v.path !== path);
@@ -118,9 +113,10 @@ export class DataBase {
     }
   }
 
-  async #incrementCount(data: PathData) {
+  async #incrementCount(data: IPath) {
     const res = await this.updatePathData(data.path, {
       path: data.path,
+      description: data.description,
       url: data.url,
       count: data.count + 1,
       unavailable: false,
