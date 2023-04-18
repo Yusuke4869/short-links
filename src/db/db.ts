@@ -7,7 +7,7 @@ import type { IPath } from "../types/path";
 
 dotenv.config();
 
-const MONGODB_URL = process.env.MONGODB_URL ?? "";
+const MONGODB_URI = process.env.MONGODB_URI ?? "";
 const DB_NAME = process.env.DB_NAME ?? "data";
 const DB_COLLECTION_NAME = process.env.DB_COLLECTION_NAME ?? "short-links";
 const DATA_NAME = process.env.DATA_NAME ?? "short-links";
@@ -25,7 +25,7 @@ export class DataBase {
   #isConnected: boolean;
 
   constructor() {
-    this.client = new MongoClient(MONGODB_URL);
+    this.client = new MongoClient(MONGODB_URI);
     this.#isConnected = false;
     this.#init();
   }
