@@ -68,7 +68,7 @@ export class DataBase {
 
   async ping() {
     await this.#wait();
-    const ping = await this.db?.admin().ping();
+    const ping = await this.db?.admin().ping({ writeConcern: { w: "majority", j: true, wtimeout: 1000 } });
     return ping;
   }
 
@@ -106,7 +106,11 @@ export class DataBase {
       if (!data) return;
 
       const setData = [...data, newPathData];
-      const res = await this.collection?.updateOne({ name: DATA_NAME }, { $set: { data: setData } });
+      const res = await this.collection?.updateOne(
+        { name: DATA_NAME },
+        { $set: { data: setData } },
+        { writeConcern: { w: "majority", j: true, wtimeout: 1000 } },
+      );
       return res;
     } catch (e) {
       console.error(e);
