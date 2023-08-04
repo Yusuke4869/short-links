@@ -10,18 +10,15 @@ dotenv.config();
 const MONGODB_URI = process.env.MONGODB_URI ?? "";
 const DB_NAME = process.env.DB_NAME ?? "data";
 const DB_COLLECTION_NAME = process.env.DB_COLLECTION_NAME ?? "short-links";
-const DATA_NAME = process.env.DATA_NAME ?? "short-links";
 
-type Data = {
+interface IPathData extends IPath {
   _id?: ObjectId;
-  name: string;
-  data: IPath[];
-};
+}
 
 export class DataBase {
   client: MongoClient;
   db: Db | undefined;
-  collection: Collection<Data> | undefined;
+  collection: Collection<IPathData> | undefined;
   #isConnected: boolean;
 
   constructor() {
@@ -68,14 +65,14 @@ export class DataBase {
 
   async ping() {
     await this.#wait();
-    const ping = await this.db?.admin().ping({ writeConcern: { w: "majority", j: true, wtimeout: 1000 } });
+    const ping = await this.db?.admin().ping();
     return ping;
   }
 
   async getData() {
     try {
       await this.#wait();
-      const res = await this.collection?.findOne({ name: DATA_NAME });
+      const res = await this.collection?.find().toArray();
       return res;
     } catch (e) {
       console.error(e);
@@ -88,28 +85,25 @@ export class DataBase {
    * @returns PathData | undefined
    */
   async getPathData(path: string) {
-    const data = await this.getData();
-    const res = data?.data.find((v) => v.path === path);
-    return res;
+    const data = await this.collection?.findOne({ path: path });
+    return data;
   }
 
   /**
    * 特定のPathのデータを更新します
    * @param path
-   * @param newPathData
+   * @param pathData
    * @returns Result | undefined
    */
-  async updatePathData(path: string, newPathData: IPath) {
+  async updatePathData(path: string, pathData: IPath) {
     try {
-      const getData = await this.getData();
-      const data = getData?.data.filter((v) => v.path !== path);
+      const data = await this.collection?.findOne({ path: path });
       if (!data) return;
 
-      const setData = [...data, newPathData];
-      const res = await this.collection?.updateOne(
-        { name: DATA_NAME },
-        { $set: { data: setData } },
-        { writeConcern: { w: "majority", j: true, wtimeout: 1000 } },
+      const res = await this.collection?.findOneAndUpdate(
+        { path: path },
+        { $set: { ...pathData } },
+        { returnDocument: "after" },
       );
       return res;
     } catch (e) {
