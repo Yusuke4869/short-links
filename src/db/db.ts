@@ -93,18 +93,11 @@ export class DataBase {
    * 特定のPathのデータを更新します
    * @param path
    * @param pathData
-   * @returns Result | undefined
+   * @returns UpdateResult
    */
   async updatePathData(path: string, pathData: IPath) {
     try {
-      const data = await this.collection?.findOne({ path: path });
-      if (!data) return;
-
-      const res = await this.collection?.findOneAndUpdate(
-        { path: path },
-        { $set: { ...pathData } },
-        { returnDocument: "after" },
-      );
+      const res = await this.collection?.updateOne({ path: path }, { $set: { ...pathData } }, { upsert: true });
       return res;
     } catch (e) {
       console.error(e);

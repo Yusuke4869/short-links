@@ -18,7 +18,7 @@ export const updatePath = async (
     unavailable: false,
   });
 
-  if (!result) return reply.code(500).send("500 Internal Server Error");
+  if (!result?.acknowledged) return reply.code(500).send("500 Internal Server Error");
   else if (!data) return reply.code(201).send("201 Created");
   return reply.code(200).send("200 OK");
 };
