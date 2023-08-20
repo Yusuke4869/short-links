@@ -128,4 +128,9 @@ export class DataBase {
     await this.#incrementCount(data);
     return data.url;
   }
+
+  async deletePathData(path: string) {
+    const res = await this.collection?.deleteOne({ path: path });
+    return res;
+  }
 }

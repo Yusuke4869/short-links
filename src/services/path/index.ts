@@ -3,3 +3,4 @@ export * from "./get";
 export * from "./update";
 export * from "./updateState";
 export * from "./disable";
+export * from "./delete";

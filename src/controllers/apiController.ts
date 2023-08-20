@@ -2,7 +2,7 @@ import type { FastifyReply, FastifyRequest } from "fastify";
 
 import { getAllPathData, status } from "../services/api";
 import { authError, tokenAuth } from "../services/auth";
-import { disablePath, getPathData, updatePath, updatePathState } from "../services/path";
+import { deletePath, disablePath, getPathData, updatePath, updatePathState } from "../services/path";
 import type { IAPIPathRequest, IAPIRequest } from "../types/api";
 
 const APIController = {
@@ -92,7 +92,7 @@ const APIController = {
   async disablePath(request: FastifyRequest<IAPIPathRequest>, reply: FastifyReply) {
     try {
       const { path } = request.params;
-      const { token: queryToken } = request.query;
+      const { token: queryToken, delete: del } = request.query;
       const { token: headerToken } = request.headers;
       const token = headerToken ?? queryToken;
 
@@ -102,7 +102,8 @@ const APIController = {
         return;
       }
 
-      await disablePath(reply, path);
+      if (del) await deletePath(reply, path);
+      else await disablePath(reply, path);
     } catch (error) {
       console.error(error);
       reply.status(500).send("500 Internal Server Error");

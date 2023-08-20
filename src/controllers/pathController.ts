@@ -1,14 +1,14 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 
 import { authError, tokenAuth } from "../services/auth";
-import { disablePath, getPathData, redirect, updatePath, updatePathState } from "../services/path";
+import { deletePath, disablePath, getPathData, redirect, updatePath, updatePathState } from "../services/path";
 import type { IPathRequest } from "../types";
 
 const PathController = {
   async getPathRequest(request: FastifyRequest<IPathRequest>, reply: FastifyReply) {
     try {
       const { path } = request.params;
-      const { token, method, info, url, description, reset } = request.query;
+      const { token, method, info, url, description, reset, delete: del } = request.query;
       const requestMethod = method ? method.toUpperCase() : request.method;
 
       if (requestMethod !== "GET" || info) {
@@ -21,7 +21,10 @@ const PathController = {
 
       if (requestMethod === "PUT") return await updatePath(reply, path, url, description);
       else if (requestMethod === "PATCH") return await updatePathState(reply, path, url, description, reset);
-      else if (requestMethod === "DELETE") return await disablePath(reply, path);
+      else if (requestMethod === "DELETE") {
+        if (del) return await deletePath(reply, path);
+        return await disablePath(reply, path);
+      }
 
       if (info) return await getPathData(reply, path);
 

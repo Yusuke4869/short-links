@@ -13,6 +13,8 @@ export interface IQuerystring {
   description: string | undefined;
   // カウントをリセットするかどうか
   reset: boolean | undefined;
+  // 物理削除
+  delete: boolean | undefined;
 }
 
 export interface IAPIPathRequest extends IAPIRequest {
