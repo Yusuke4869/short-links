@@ -14,6 +14,6 @@ export const disablePath = async (reply: FastifyReply, path: string) => {
     unavailable: true,
   });
 
-  if (!result) return reply.code(500).send("500 Internal Server Error");
+  if (!result?.acknowledged) return reply.code(500).send("500 Internal Server Error");
   return reply.code(200).send("200 OK");
 };
