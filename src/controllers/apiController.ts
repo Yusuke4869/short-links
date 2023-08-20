@@ -102,7 +102,7 @@ const APIController = {
         return;
       }
 
-      if (del) await deletePath(reply, path);
+      if (String(del) === "true") await deletePath(reply, path);
       else await disablePath(reply, path);
     } catch (error) {
       console.error(error);

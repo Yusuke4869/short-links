@@ -22,7 +22,7 @@ const PathController = {
       if (requestMethod === "PUT") return await updatePath(reply, path, url, description);
       else if (requestMethod === "PATCH") return await updatePathState(reply, path, url, description, reset);
       else if (requestMethod === "DELETE") {
-        if (del) return await deletePath(reply, path);
+        if (String(del) === "true") return await deletePath(reply, path);
         return await disablePath(reply, path);
       }
 
