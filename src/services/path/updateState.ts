@@ -1,13 +1,13 @@
-import type { FastifyReply } from "fastify";
-
 import { db } from "../../app";
+
+import type { FastifyReply } from "fastify";
 
 export const updatePathState = async (
   reply: FastifyReply,
   path: string,
   redirectUrl: string | undefined,
   description: string | undefined,
-  reset: boolean | undefined,
+  reset: boolean | undefined
 ) => {
   const data = await db.getPathData(path);
   if (!data) return reply.code(404).send(`${path} Not Found`);

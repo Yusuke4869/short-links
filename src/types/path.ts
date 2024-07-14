@@ -1,4 +1,4 @@
-import { IAPIPathQuerystring } from "./api";
+import type { IAPIPathQuerystring } from "./api";
 
 export interface IPath {
   path: string;

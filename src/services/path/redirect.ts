@@ -1,6 +1,6 @@
-import type { FastifyReply } from "fastify";
-
 import { db } from "../../app";
+
+import type { FastifyReply } from "fastify";
 
 export const redirect = async (reply: FastifyReply, path: string) => {
   const redirectUrl = await db.getUrl(path);

@@ -1,15 +1,23 @@
+import {
+  disablePathController,
+  getAllPathInfoController,
+  getPathInfoController,
+  getStatusController,
+  updatePathController,
+  updatePathStateController,
+} from "../controllers/apiController";
+
+import type { IAPIPathRequest, IAPIRequest } from "../types/api";
 import type { FastifyInstance } from "fastify";
 
-import APIController from "../controllers/apiController";
-import type { IAPIPathRequest, IAPIRequest } from "../types/api";
-
+// eslint-disable-next-line @typescript-eslint/require-await
 const APIRoutes = async (fastify: FastifyInstance) => {
-  fastify.get("/status", APIController.getStatus);
-  fastify.get<IAPIRequest>("/all", APIController.getAllPathInfo);
-  fastify.get<IAPIPathRequest>("/path/:path", APIController.getPathInfo);
-  fastify.put<IAPIPathRequest>("/path/:path", APIController.updatePath);
-  fastify.patch<IAPIPathRequest>("/path/:path", APIController.updatePathState);
-  fastify.delete<IAPIPathRequest>("/path/:path", APIController.disablePath);
+  fastify.get("/status", getStatusController);
+  fastify.get<IAPIRequest>("/all", getAllPathInfoController);
+  fastify.get<IAPIPathRequest>("/path/:path", getPathInfoController);
+  fastify.put<IAPIPathRequest>("/path/:path", updatePathController);
+  fastify.patch<IAPIPathRequest>("/path/:path", updatePathStateController);
+  fastify.delete<IAPIPathRequest>("/path/:path", disablePathController);
 };
 
 export default APIRoutes;

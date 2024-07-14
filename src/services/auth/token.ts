@@ -1,10 +1,10 @@
-import dotenv from "dotenv";
+import { config } from "dotenv";
 
-dotenv.config();
+config();
 
 const TOKEN = process.env.TOKEN?.split(",") ?? null;
 
-export const tokenAuth = async (token: string | undefined) => {
+export const tokenAuth = (token: string | undefined) => {
   if (!token || !TOKEN) return 401;
   if (TOKEN.includes(token)) return 200;
   return 403;

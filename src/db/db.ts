@@ -1,11 +1,12 @@
-import dotenv from "dotenv";
-import { MongoClient } from "mongodb";
-import type { Collection, Db, ObjectId } from "mongodb";
 import { exit } from "process";
 
-import type { IPath } from "../types/path";
+import { config } from "dotenv";
+import { MongoClient } from "mongodb";
 
-dotenv.config();
+import type { IPath } from "../types/path";
+import type { Collection, Db, ObjectId } from "mongodb";
+
+config();
 
 const MONGODB_URI = process.env.MONGODB_URI ?? "";
 const DB_NAME = process.env.DB_NAME ?? "data";
@@ -24,7 +25,7 @@ export class DataBase {
   constructor() {
     this.client = new MongoClient(MONGODB_URI);
     this.#isConnected = false;
-    this.#init();
+    void this.#init();
   }
 
   async #init() {
@@ -33,7 +34,7 @@ export class DataBase {
       .then(() => {
         this.#isConnected = true;
       })
-      .catch((e) => {
+      .catch((e: unknown) => {
         console.error(e);
         console.error("Could Not Connected Mongodb");
         exit(1);
@@ -58,7 +59,7 @@ export class DataBase {
           }
         }, 100);
       } catch (e) {
-        reject(e);
+        reject(new Error(e as string));
       }
     });
   }

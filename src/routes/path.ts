@@ -1,10 +1,11 @@
+import { getPathRequestController } from "../controllers/pathController";
+
+import type { IPathRequest } from "../types";
 import type { FastifyInstance } from "fastify";
 
-import PathController from "../controllers/pathController";
-import type { IPathRequest } from "../types";
-
+// eslint-disable-next-line @typescript-eslint/require-await
 const PathRoutes = async (fastify: FastifyInstance) => {
-  fastify.get<IPathRequest>("/:path", PathController.getPathRequest);
+  fastify.get<IPathRequest>("/:path", getPathRequestController);
 };
 
 export default PathRoutes;

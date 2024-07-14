@@ -1,6 +1,6 @@
-import type { FastifyReply } from "fastify";
-
 import { db } from "../../app";
+
+import type { FastifyReply } from "fastify";
 
 export const status = async (reply: FastifyReply) => {
   const s = await db.ping();

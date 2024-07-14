@@ -1,12 +1,12 @@
-import type { FastifyReply } from "fastify";
-
 import { db } from "../../app";
+
+import type { FastifyReply } from "fastify";
 
 export const updatePath = async (
   reply: FastifyReply,
   path: string,
   redirectUrl: string | undefined,
-  description: string | undefined,
+  description: string | undefined
 ) => {
   if (!redirectUrl) return reply.code(400).send("400 Bad Request");
   const data = await db.getPathData(path);
