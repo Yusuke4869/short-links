@@ -1,5 +1,1 @@
 # Short Links
-
-## License
-
-MIT
