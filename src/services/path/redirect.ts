@@ -6,5 +6,5 @@ export const redirect = async (reply: FastifyReply, path: string) => {
   const redirectUrl = await db.getUrl(path);
   if (!redirectUrl) return reply.code(404).send(`${path} Not Found`);
 
-  return reply.redirect(302, redirectUrl);
+  return reply.redirect(redirectUrl, 302);
 };
