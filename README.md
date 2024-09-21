@@ -1,5 +1,8 @@
 # Short Links
 
+> [!NOTE]
+> [Yusuke4869/URL-Shortener](https://github.com/Yusuke4869/URL-Shortener) に移行しました。
+
 fastify と mongodb を使った短縮 URL
 
 ## 使い方
