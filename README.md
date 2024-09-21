@@ -1,5 +1,6 @@
 # Short Links
 
+<!-- prettier-ignore -->
 > [!NOTE]
 > [Yusuke4869/URL-Shortener](https://github.com/Yusuke4869/URL-Shortener) に移行しました。
 
